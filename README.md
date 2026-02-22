@@ -39,3 +39,10 @@ Data Source → Cleaning → Structuring → CSV → MongoDB Storage
 ### Status
 Milestone 1 Completed  
 Ready for Sentiment Analysis Integration
+## 📊 Sentiment Analytics Dashboard
+
+### Bar Chart
+![Bar Chart](sentiment_bar_chart.png)
+
+### Pie Chart
+![Pie Chart](sentiment_pie_chart.png)

@@ -1,31 +1,29 @@
 from mongo_db import insert_into_mongo
-from news_api import fetch_news
+from data_loader import load_real_dataset
 from cleaner import clean_text
 import pandas as pd
 import uuid
 from datetime import datetime
 
 def run_pipeline():
-    raw_data = fetch_news()
+    data = load_real_dataset()
 
     structured_data = []
 
-    for item in raw_data:
-        if not item["title"]:
-            continue
-
+    for item in data:
         cleaned = clean_text(item["title"])
 
         structured_data.append({
-            "id": str(uuid.uuid4()),
-            "source": item["source"],
+            "source": "Kaggle Financial News",
             "original_title": item["title"],
             "cleaned_title": cleaned,
-            "date": item["date"],
-            "ingested_at": datetime.now()
+            "sentiment_label": item["sentiment"]
         })
 
-    df = pd.DataFrame(structured_data)
+    print("Total records:", len(structured_data))
+
+    import pandas as pd
+    return pd.DataFrame(structured_data)
 
     # Remove duplicates
     df = df.drop_duplicates(subset=["cleaned_title"])

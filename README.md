@@ -46,3 +46,10 @@ Ready for Sentiment Analysis Integration
 
 ### Pie Chart
 ![Pie Chart](sentiment_pie_chart.png)
+## 🤖 Milestone 2 – Sentiment Prediction Model
+
+- TF-IDF vectorization
+- Logistic Regression classifier
+- Train/Test split
+- Model evaluation (Accuracy, Precision, Recall, F1-score)
+- Model persistence using Joblib

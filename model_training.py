@@ -3,7 +3,9 @@ from pymongo import MongoClient
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 import joblib
 
 
@@ -36,12 +38,17 @@ def train_sentiment_model():
     )
 
     # TF-IDF Vectorization
-    vectorizer = TfidfVectorizer(max_features=5000)
+    vectorizer = TfidfVectorizer(
+        max_features=10000,
+        ngram_range=(1, 2),
+        stop_words="english"
+    )
+
     X_train_tfidf = vectorizer.fit_transform(X_train)
     X_test_tfidf = vectorizer.transform(X_test)
 
-    # Logistic Regression Model
-    model = LogisticRegression(max_iter=1000)
+    # Model
+    model = LogisticRegression(max_iter=1000, class_weight="balanced")
     model.fit(X_train_tfidf, y_train)
 
     # Predictions
@@ -52,7 +59,19 @@ def train_sentiment_model():
     print("\nClassification Report:\n")
     print(classification_report(y_test, y_pred))
 
-    # Save model and vectorizer
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    plt.title("Confusion Matrix")
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.tight_layout()
+    plt.savefig("confusion_matrix.png")
+    plt.close()
+
+    # Save Model
     joblib.dump(model, "sentiment_model.pkl")
     joblib.dump(vectorizer, "tfidf_vectorizer.pkl")
 
